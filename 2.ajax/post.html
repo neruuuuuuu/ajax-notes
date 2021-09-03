@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ajax</title>
+  <style>
+    #result {
+      width: 200px;
+      height: 200px;
+      border: solid 1px rgb(233, 216, 118);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="result"></div>
+  <script>
+    // 获取div元素
+    const result = document.getElementById('result')
+    // 事件监听
+    result.addEventListener('mouseover',function(){
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST','http://localhost:8000/serve')
+      // 设置请求头
+      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+      xhr.send()
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+          if(xhr.status >= 200 && xhr.status < 300){
+            result.innerHTML = xhr.response
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>
