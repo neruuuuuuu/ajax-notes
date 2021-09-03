@@ -29,6 +29,21 @@ app.all('/json-serve', (request, response) => {
   response.send(str)
 })
 
+app.get('/delay', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  setTimeout(() => {
+    response.send('请求超时')
+  }, 3000);
+})
+
+app.all('/jquery-serve', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  const data = {
+    data: 'hello jquery ajax'
+  }
+  response.send(JSON.stringify(data))
+})
+
 // 4.监听端口启动服务
 app.listen(8000, () => {
   console.log('http://localhost:80000/serve')

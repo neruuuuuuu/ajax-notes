@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax cancel</title>
+</head>
+<body>
+  <button>发送</button>
+  <button>取消</button>
+  <script>
+    const btns = document.querySelectorAll('button')
+    let xhr = null 
+    let isSending = false
+    btns[0].onclick =function(){
+      if (isSending) {
+        xhr.abort()
+      }
+      xhr = new XMLHttpRequest()
+      isSending = true 
+      xhr.open('GET','http://localhost:8000/delay')
+      xhr.send()
+      xhr.onreadystatechange = function(){
+        if (xhr.readystatus === 4) {
+          isSending = false
+        }
+      }
+    }
+    btns[1].onclick = function(){
+      xhr.abort()
+    }    
+  </script>
+</body>
+</html>

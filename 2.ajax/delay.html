@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ajax</title>
+  <style>
+    #result {
+      width: 200px;
+      height: 200px;
+      border: solid 1px rgb(89, 181, 218);
+    }
+  </style>
+</head>
+
+<body>
+  <button>发送请求</button>
+  <div id="result"></div>
+  <script>
+    // 获取button元素
+    const btn = document.getElementsByTagName('button')[0]
+    const result = document.getElementById('result')
+    // 绑定事件
+    btn.onclick = function () {
+      //1.创建对象 
+      const xhr = new XMLHttpRequest()
+      xhr.timeout = 2000
+      xhr.ontimeout = function(){
+        alert('网络异常')
+      }
+      // 2.初始化，设置请求方法和url
+      xhr.open('GET','http://localhost:8000/delay')
+      // 3.发送请求
+      xhr.send()
+      // 4.处理服务返回结果
+      // readystate 是xhr对象的属性，表示状态0：未初始化 1：open完毕 2：send完毕 3：返回部分 4：返回全部
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+          if(xhr.status >= 200 && xhr.status < 300){
+            result.innerHTML = xhr.response
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

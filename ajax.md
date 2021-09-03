@@ -16,7 +16,7 @@
 
 XML：可扩展标记语言，用于传输和存储数据，自定义标签
 
-```
+```xml
 <student>
 	<name>小明</name>
 	<age>18</age>
@@ -29,7 +29,7 @@ XML：可扩展标记语言，用于传输和存储数据，自定义标签
 
 JS对象简谱（JavaScript Object Notation），一种轻量级的数据交换格式。
 
-```
+```json
 {"naem":"小明","age":"18"}
 ```
 
@@ -81,7 +81,7 @@ npm i express
 
 ### 使用
 
-```
+```js
 // 1.引入express
 const { request, response } = require('express');
 const express = require('express');
@@ -109,7 +109,7 @@ app.listen(8000, () => {
 
 ### 基本步骤
 
-```
+```js
 //1.创建对象 
 const xhr = new XMLHttpRequest()
 // 2.初始化，设置请求方法和url,get参数写这
@@ -133,7 +133,7 @@ xhr.onreadystatechange = function(){
 
 ### 设置请求头
 
-```
+```js
 xhr.open('POST','http://localhost:8000/serve')
 // 设置请求头
 xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
@@ -142,7 +142,7 @@ xhr.send()
 
 ### 响应JSON
 
-```
+```js
  const data = {
     name: 'xiaohong'
   }
@@ -152,12 +152,12 @@ xhr.send()
 
 ### JSON转str
 
-```
+```js
 // 自动数据转换
 xhr.responseType = 'json'
 ```
 
-```
+```js
 // 手动转换
 let data = JSON.parse(xhr.response)
 ```
@@ -190,7 +190,78 @@ nodemon ./server.js localhost 8080
 
 url参数加上时间戳
 
-```
+```js
 xhr.open('GET','http://localhost:8000/serve/ie?t='+Date.now())
+```
+
+## 超时与网络延迟
+
+```js
+setTimeout(() => {
+    response.send('请求超时')
+}, 3000);
+```
+
+```js
+xhr.timeout = 2000
+xhr.ontimeout = function(){
+	alert('网络延迟')
+}
+```
+
+## 取消请求
+
+```js
+ xhr.abort()
+```
+
+#### 重复发送取消上一个请求
+
+```js
+let isSending = false
+    btns[0].onclick =function(){
+      if (isSending) {
+        xhr.abort()
+      }
+      xhr = new XMLHttpRequest()
+      isSending = true 
+      xhr.open('GET','http://localhost:8000/delay')
+      xhr.send()
+      xhr.onreadystatechange = function(){
+        if (xhr.readystatus === 4) {
+          isSending = false
+        }
+      }
+    }
+```
+
+## jQuery
+
+```js
+ $('button').eq(0).click(function(){
+     $.get('http://localhost:8000/jquery-serve',{a:100,b:200},function(data){
+         console.log(data)
+     },'json')
+ })
+$('button').eq(1).click(function(){
+    $.post('http://localhost:8000/jquery-serve',{a:100,b:200},function(data){
+        console.log(data)
+    })
+})
+$('button').eq(2).click(function(){
+    $.ajax({
+        url: 'http://localhost:8000/jquery-serve',
+        data: {a:100,b:200},
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            console.log(data)
+        },
+        error: function(){
+            console.log('未知错误')
+        },
+        timeout: 2000
+    })
+})
 ```
 
