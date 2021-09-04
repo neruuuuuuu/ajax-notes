@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axios</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <button>GET</button>
+  <button>POST</button>   
+  <button>AJAX</button>
+  <script>
+    const btns = document.querySelectorAll('button')
+    console.log(btns)
+    axios.defaults.baseURL = 'http://localhost:8000'
+    btns[0].onclick = function(){
+      axios.get('/axios-serve',{
+        params:{
+          name: 'xiaoming',
+          age:18
+        }
+      })
+      .then((respone)=>{
+        console.log(respone)
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    }
+    btns[1].onclick = function(){
+      axios.post('/axios-serve', {
+        name:'xiaohong',
+        age:18
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    btns[2].onclick = function(){
+      axios({
+        method:'get',
+        url: '/axios-serve',
+        data:{
+          name: 'zhangsan',
+          age:40
+        }
+      })
+      .then((response)=>{
+        console.log(response)  
+      })
+    }
+  </script>
+</body>
+</html>

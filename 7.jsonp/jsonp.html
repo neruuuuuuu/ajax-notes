@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jsonp</title>
+</head>
+<body>
+    <input type="text" id="username">
+    <p></p>
+    <script>
+      const input = document.querySelector('input')
+      const p = document.querySelector('p')
+      function handel(data){
+        input.style.border = "soild 1px red"
+        p.innerHTML = data
+      }
+
+      input.onblur = function(){
+        let username = this.value
+        const script = document.createElement('script')
+        script.src = 'http://127.0.0.1:8000/check-username'
+        document.body.appendChild(script)
+      }
+    </script>
+</body>
+</html>

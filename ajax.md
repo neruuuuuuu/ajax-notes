@@ -25,7 +25,7 @@ XML：可扩展标记语言，用于传输和存储数据，自定义标签
 
 已被JSON取代
 
-## JSON
+## [JSON](https://www.json.org/json-en.html)
 
 JS对象简谱（JavaScript Object Notation），一种轻量级的数据交换格式。
 
@@ -105,7 +105,7 @@ app.listen(8000, () => {
 })
 ```
 
-## XMLHttpRequest
+## [XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
 
 ### 基本步骤
 
@@ -235,7 +235,7 @@ let isSending = false
     }
 ```
 
-## jQuery
+## [jQuery](https://jquery.com/)
 
 ```js
  $('button').eq(0).click(function(){
@@ -263,5 +263,135 @@ $('button').eq(2).click(function(){
         timeout: 2000
     })
 })
+```
+
+## [Axios](https://axios-http.com/docs/intro)
+
+```js
+axios.defaults.baseURL = 'http://localhost:8000'
+axios.get('/axios-serve',{
+    params:{
+        name: 'xiaoming',
+        age:18
+    }
+}).then((respone)=>{
+    console.log(respone)
+})	
+
+axios.post('/axios-serve', {
+    name:'xiaohong',
+    age:18
+}).then(function (response) {
+    console.log(response);
+})
+
+axios({
+    method:'get',
+    url: '/axios-serve',
+    data:{
+        name: 'zhangsan',
+        age:40
+    }
+}).then((response)=>{
+    console.log(response)  
+})
+```
+
+## [fecth](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
+
+```js
+fetch('http://localhost:8000/fetch-serve',{
+    method: 'POST', 
+    headers:{
+        'user-agent': 'Mozilla/4.0 MDN Example',
+        'content-type': 'application/json'
+    },
+    body:'name=zhangsan'
+})
+```
+
+## 同源策略
+
+**同源策略**是一个重要的安全策略，它用于限制一个[origin](https://developer.mozilla.org/zh-CN/docs/Glossary/Origin)的文档或者它加载的脚本如何能与另一个源的资源进行交互。它能帮助阻隔恶意文档，减少可能被攻击的媒介。
+
+**Origin**: 协议+主机(域名)+端口，三个都一致时是同源
+
+```js
+//server.js
+app.all('/home', (request, response) => {
+  response.sendFile(__dirname + '/index.html')
+})
+
+app.all('/data', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.setHeader('Access-Control-Allow-Headers', '*')
+  const data = {
+    data: 'hello same origin'
+  }
+  response.send(JSON.stringify(data))
+})
+```
+
+```js
+//index.html
+const xhr = new XMLHttpRequest()
+xhr.responseType = 'json'
+xhr.open('GET','/data')
+xhr.send()
+xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){
+        if(xhr.status >= 200 && xhr.status < 300){
+            div.innerHTML = xhr.response.data
+        }
+    }
+}
+```
+
+由于浏览器同源政策的影响，跨域的ajax请求是不被允许。
+
+## 跨域
+
+项目大数据多可能用到多个不同域名的服务器，因此需要跨域
+
+### JSONP
+
+JSON with padding  非官方的跨域解决方案，只支持get请求。
+
+利用script标签的跨域能力发送请求
+
+```js
+app.all('/check-username', (request, response) => {
+  const data = {
+    exist: 1,
+    msg: '用户名已存在'
+  }
+  const str = JSON.stringify(data.msg)
+  response.end(`handel(${str})`)
+})
+
+```
+
+```js
+function handel(data){
+    input.style.border = "soild 1px red"
+    p.innerHTML = data
+}
+
+input.onblur = function(){
+    let username = this.value
+    const script = document.createElement('script')
+    script.src = 'http://127.0.0.1:8000/check-username'
+    document.body.appendChild(script)
+}
+```
+
+### CORS
+
+Cross-Origin Resourse Sharing 跨域资源共享，官方的跨域解决方案
+
+设置一个请求头告诉浏览器，该请求允许跨域
+
+```js
+  response.setHeader('Access-Control-Allow-Origin', '*')
 ```
 

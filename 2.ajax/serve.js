@@ -44,6 +44,33 @@ app.all('/jquery-serve', (request, response) => {
   response.send(JSON.stringify(data))
 })
 
+app.all('/axios-serve', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.setHeader('Access-Control-Allow-Headers', '*')
+  const data = {
+    data: 'hello axios ajax'
+  }
+  response.send(JSON.stringify(data))
+})
+
+app.all('/fetch-serve', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.setHeader('Access-Control-Allow-Headers', '*')
+  const data = {
+    data: 'hello fetch ajax'
+  }
+  response.send(JSON.stringify(data))
+})
+
+app.all('/check-username', (request, response) => {
+  const data = {
+    exist: 1,
+    msg: '用户名已存在'
+  }
+  const str = JSON.stringify(data.msg)
+  response.end(`handel(${str})`)
+})
+
 // 4.监听端口启动服务
 app.listen(8000, () => {
   console.log('http://localhost:80000/serve')
